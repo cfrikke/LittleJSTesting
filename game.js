@@ -23,28 +23,16 @@ function gameInit()
 {
     // create tile collision and visible tile layer
     initTileCollision(vec2(32, 16));
-    const pos = vec2();
+    const pos = vec2(2,3);
     const tileLayer = new TileLayer(pos, tileCollisionSize);
+    
+    // Create the main menu beta test
+    CreateWorld();
 
     // get level data from the tiles image
     const imageLevelDataRow = 1;
     mainContext.drawImage(tileImage, 0, 0);
-    for (pos.x = tileCollisionSize.x; pos.x--;){
-    for (pos.y = tileCollisionSize.y; pos.y--;)
-    {
-        const imageData = mainContext.getImageData(pos.x, 16*(imageLevelDataRow+1)-pos.y-1, 1, 1).data;
-        if (imageData[0])
-        {
-            const tileIndex = 1;
-            const direction = randInt(4)
-            const mirror = randInt(2);
-            const color = randColor();
-            const data = new TileLayerData(tileIndex, direction, mirror, color);
-            tileLayer.setData(pos, data);
-            setTileCollisionData(pos, 1);
-        }
-    }
-    }
+
     tileLayer.redraw();
 
     // move camera to center of collision
@@ -54,7 +42,8 @@ function gameInit()
     gravity = -.01;
 
     // create particle emitter
-    createMouseParticleTrail();
+    //createMouseParticleTrail();
+    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +52,7 @@ function gameUpdate()
     localStorage.clear();
     JoinMedal.unlock();
     if(MouseParticleTrailCreated){
-    MouseParticleTrail();
+    //MouseParticleTrail();
     }
     if (mouseWasPressed(0))
     {
@@ -87,7 +76,7 @@ function gameUpdatePost()
 function gameRender()
 {
     // draw a grey square in the background without using webgl
-    drawRect(cameraPos, tileCollisionSize.add(vec2(5)), new Color(.2,.2,.2), 0, 0);
+    //drawRect(cameraPos, tileCollisionSize.add(vec2(5)), new Color(.2,.2,.2), 0, 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,7 +114,25 @@ function MouseParticleTrail(){
         particleEmitter.pos = mousePos;
         }
 
-}
+    }
+
+    function CreateWorld() {
+        const pos = vec2(2,3);
+        const Player = new EngineObject(pos);
+        const JumpForce = vec2(0,-1);
+        const floor = new EngineObject(vec2(15,0), vec2(100, 1));
+        Player.setCollision(1, 1, 1);
+        Player.elasticity = 0.2;
+        //Player.gravityScale = 0;
+        floor.setCollision(1, 1, 1);
+        floor.gravityScale = 0;
+        floor.mass = 0;
+        if(mouseIsDown(0)){
+            Player.applyForce(JumpForce);
+        }
+    }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Startup LittleJS Engine
