@@ -4,31 +4,37 @@
     - Demos all the main engine features
     - Builds to a zip file
 */
-
 'use strict';
-
 // sound effects
-const sound_click = new Sound([10,0]);
-
+const sound_click =    new Sound([1,.2,25,,0.1,,1,,,,,0.2,,4]);
 // medals
-const JoinMedal = new Medal(0, 'Example Medal', 'More info about the medal goes here.', '🎖️');
+const JumpMedal = new Medal(0, 'Geometry Dash', 'You can jump!', '🎖️');
 medalsInit('Hello World');
 let MouseParticleTrailCreated = false;
 
 // game variables
 let particleEmitter;
+const pos = vec2(2,3);
+const Player = new EngineObject(pos);
+const JumpForce = vec2(0,-1);
+const floor = new EngineObject(vec2(15,0), vec2(100, 1));
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameInit()
 {
     // create tile collision and visible tile layer
     initTileCollision(vec2(32, 16));
-    const pos = vec2(2,3);
+
     const tileLayer = new TileLayer(pos, tileCollisionSize);
     
-    // Create the main menu beta test
-    CreateWorld();
-
+    Player.setCollision(1, 1, 1);
+    Player.elasticity = 0.25;
+    floor.setCollision(1, 1, 1);
+    floor.gravityScale = 0;
+    floor.mass = 0;
+    
     // get level data from the tiles image
     const imageLevelDataRow = 1;
     mainContext.drawImage(tileImage, 0, 0);
@@ -39,42 +45,45 @@ function gameInit()
     cameraPos = tileCollisionSize.scale(.5);
 
     // enable gravity
-    gravity = -.01;
+    gravity = -0.0075;
 
-    // create particle emitter
-    //createMouseParticleTrail();
-    
+    // Create the world
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdate()
 {
     localStorage.clear();
-    JoinMedal.unlock();
     if(MouseParticleTrailCreated){
     //MouseParticleTrail();
     }
     if (mouseWasPressed(0))
     {
         // play sound when mouse is pressed
-        sound_click.play(mousePos);
-
-        // unlock medals
-
+      //  sound_click.play(mousePos);
     }
 
-    // move particles to mouse location if on screen
+    // Player Control
+    if(keyWasPressed(32)){
+    if(collideWithTileRaycast(1, vec2(Player.x, floor.y))){
+    Player.applyAcceleration(JumpForce);
+    JumpMedal.unlock();
+    }
+    }
+    //  respawn player if (player.deadTimer > 1) {player = new Player(playerStartPos); player.velocity = vec2(0,.1);}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdatePost()
 {
+    // cameraPos = cameraPos.lerp(player.pos, clamp(player.getAliveTime()/2);
 
+    //updateParallaxLayers();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameRender()
-{
+{   //draw"sky"();
+    //draw"moon"();
     // draw a grey square in the background without using webgl
     //drawRect(cameraPos, tileCollisionSize.add(vec2(5)), new Color(.2,.2,.2), 0, 0);
 }
@@ -101,6 +110,7 @@ function createMouseParticleTrail(){
     MouseParticleTrailCreated = true;
 
 }
+// change name to win statement if needed.
 function MouseParticleTrail(){
     if (mouseWasPressed(0))
     {
@@ -116,21 +126,6 @@ function MouseParticleTrail(){
 
     }
 
-    function CreateWorld() {
-        const pos = vec2(2,3);
-        const Player = new EngineObject(pos);
-        const JumpForce = vec2(0,-1);
-        const floor = new EngineObject(vec2(15,0), vec2(100, 1));
-        Player.setCollision(1, 1, 1);
-        Player.elasticity = 0.2;
-        Player.gravityScale = 0.1;
-        floor.setCollision(1, 1, 1);
-        floor.gravityScale = 0;
-        floor.mass = 0;
-        if(mouseIsDown(0)){
-            Player.applyForce(JumpForce);
-        }
-    }
 
 
 
