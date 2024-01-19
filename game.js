@@ -123,7 +123,7 @@ function MouseParticleTrail(){
         const floor = new EngineObject(vec2(15,0), vec2(100, 1));
         Player.setCollision(1, 1, 1);
         Player.elasticity = 0.2;
-        //Player.gravityScale = 0;
+        Player.gravityScale = 0.1;
         floor.setCollision(1, 1, 1);
         floor.gravityScale = 0;
         floor.mass = 0;
