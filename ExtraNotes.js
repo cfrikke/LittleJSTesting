@@ -1,4 +1,4 @@
-class Character extends Gameobject
+class Character extends GameObject
 {
     construtor(pos)
     {
