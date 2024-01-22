@@ -18,6 +18,7 @@ const pos = vec2(2,3);
 const Player = new EngineObject(pos);
 const JumpForce = vec2(0,-1);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
+const moveInput = this.moveInput.copy();
 
 
 
@@ -52,6 +53,7 @@ function gameInit()
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdate()
 {
+    const moveInput = this.moveInput.copy();
     localStorage.clear();
     if(MouseParticleTrailCreated){
     //MouseParticleTrail();
@@ -63,12 +65,9 @@ function gameUpdate()
     }
 
     // Player Control
-    if(keyWasPressed(32)){
-    if(collideWithTileRaycast(1, vec2(Player.x, floor.y))){
-    Player.applyAcceleration(JumpForce);
-    JumpMedal.unlock();
-    }
-    }
+    this.moveInput = isUsingGamepad ? gamepadStick(0) : 
+    vec2(keyIsDown(39) - keyIsDown(37), keyIsDown(38) - keyIsDown(40));
+
     //  respawn player if (player.deadTimer > 1) {player = new Player(playerStartPos); player.velocity = vec2(0,.1);}
 }
 
