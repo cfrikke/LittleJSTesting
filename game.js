@@ -18,7 +18,6 @@ const pos = vec2(2,3);
 const Player = new EngineObject(pos);
 const JumpForce = vec2(0,-1);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
-const moveInput = this.moveInput.copy();
 
 
 
@@ -53,7 +52,6 @@ function gameInit()
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdate()
 {
-    const moveInput = this.moveInput.copy();
     localStorage.clear();
     if(MouseParticleTrailCreated){
     //MouseParticleTrail();
@@ -65,9 +63,10 @@ function gameUpdate()
     }
 
     // Player Control
-    this.moveInput = isUsingGamepad ? gamepadStick(0) : 
-    vec2(keyIsDown(39) - keyIsDown(37), keyIsDown(38) - keyIsDown(40));
-
+    if (keyWasPressed(32)){
+    if(floor.collideWithObject(floor));
+        Player.applyForce(JumpForce);
+    }
     //  respawn player if (player.deadTimer > 1) {player = new Player(playerStartPos); player.velocity = vec2(0,.1);}
 }
 
