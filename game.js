@@ -15,12 +15,15 @@ let MouseParticleTrailCreated = false;
 // game variables
 let particleEmitter;
 const pos = vec2(2,3);
-const Player = new EngineObject(vec2(1,3));
+const Player = new EngineObject(vec2(1,3), vec2(0.999, 0.999));
 const JumpForce = vec2(0,0.25);
 const RightWalkSpeed = vec2(0.001,0);
 const LeftWalkSpeed = vec2(-0.001,0);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
+const platform = new EngineObject(vec2(15,2), vec2(1, 1));
+const platform2 = new EngineObject(vec2(16,4), vec2(1, 1));
 const JumpTimer = new Timer;
+let PlayerTouchingGround = true;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,11 +35,17 @@ function gameInit()
     const tileLayer = new TileLayer(pos, tileCollisionSize);
     
     Player.setCollision(1, 1, 1);
-    Player.elasticity = 0.25;
+    Player.elasticity = 0;
     Player.friction = 1;
     floor.setCollision(1, 1, 1);
     floor.gravityScale = 0;
     floor.mass = 0;
+    platform.setCollision(1, 1, 1);
+    platform.gravityScale = 0;
+    platform.mass = 0;
+    platform2.setCollision(1, 1, 1);
+    platform2.gravityScale = 0;
+    platform2.mass = 0;
     
     // get level data from the tiles image
     const imageLevelDataRow = 1;
@@ -49,16 +58,14 @@ function gameInit()
 
     // enable gravity
     gravity = -0.009807;
-    let time = 0;
-    let Time = 0;
     
-    
+    setTimeout(function(){Player.applyForce(vec2(0,0.25))},1000);
+
     // Create the world
 }
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdate()
 {
-
     localStorage.clear();
     if(MouseParticleTrailCreated){
     //MouseParticleTrail();
@@ -72,8 +79,13 @@ function gameUpdate()
     // Player Control
 
     document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 87) {
+        if (e.keyCode == 87) {
             // W
+            if(PlayerTouchingGround){
+            Player.applyForce(vec2(0,0.25));
+            PlayerTouchingGround = false;
+            setTimeout(function(){PlayerTouchingGround = true;}, 1000);
+            }
         }
         if (e.keyCode === 65) {
             // A
@@ -99,11 +111,11 @@ function gameUpdate()
     document.addEventListener('keyup', (e) => {
         if (e.keyCode === 87) {
             // W
-            Player.velocity = (vec2(0,0));
+            //Player.velocity = (vec2(0,0));
         }
         if (e.keyCode === 65) {
             // A
-            Player.friction = 0.75;
+            Player.friction = 0.5;
         }
         if (e.keyCode === 83) {
             // S
@@ -111,7 +123,7 @@ function gameUpdate()
         }
         if (e.keyCode === 68) {
             // D
-            Player.friction = 0.75;
+            Player.friction = 0.5;
         }
     });
 
