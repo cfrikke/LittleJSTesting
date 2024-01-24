@@ -37,6 +37,8 @@ function gameInit()
     floor.setCollision(1, 1, 1);
     floor.gravityScale = 0;
     floor.mass = 0;
+   // buildlevel();
+    gameTimer.set(300);
     
     // get level data from the tiles image
     const imageLevelDataRow = 1;
@@ -68,11 +70,18 @@ function gameUpdate()
         // play sound when mouse is pressed
       //  sound_click.play(mousePos);
     }
+    // respawn player 
+   // if (player.deadTimer > 1)
+    //{
+    //    player = new player(playerStartPos);
+    //    player.velocity = vec2(0,.1);
+   //     sound_jump.play();
+   // }
 
     // Player Control
 
     document.addEventListener('keydown', (e) => {
-        if (e.keyCode === 87) {
+        if (e.keyCode === 83) {
             // W
         }
         if (e.keyCode === 65) {
@@ -83,7 +92,7 @@ function gameUpdate()
             console.log(Player.velocity.x);
         }
         }
-        if (e.keyCode === 83) {
+        if (e.keyCode === 87) {
             // S
             Player.applyForce(vec2(0,-1));
         }
@@ -105,7 +114,7 @@ function gameUpdate()
             // A
             Player.friction = 0.75;
         }
-        if (e.keyCode === 83) {
+        if (e.keyCode === 83) { // switch the keys around to w is jump and not s.w
             // S
             Player.applyForce(vec2(0,0));
         }
@@ -130,8 +139,8 @@ function gameUpdatePost()
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameRender()
-{   //draw"sky"();
-    //draw"moon"();
+{  // drawSky();
+    //drawMoon();
     // draw a grey square in the background without using webgl
     //drawRect(cameraPos, tileCollisionSize.add(vec2(5)), new Color(.2,.2,.2), 0, 0);
 }
@@ -141,6 +150,15 @@ function gameRenderPost()
 {
     // draw to overlay canvas for hud rendering
     //drawTextScreen('LittleJS Engine Demo', vec2(mainCanvasSize.x/2, 80), 80);
+    const drawText = (tet, x, y, size = 50) =>
+    {
+        overlayContext.textAlign = 'center';
+        overlayContext.textBaseline = ' top';
+        overlayContext.font = size + 'px arial';
+        overlayContext.fillStyle = '#fff';
+        overlayContext.lineWidth = 2;
+    }
+
 }
 function createMouseParticleTrail(){
     particleEmitter = new ParticleEmitter(
