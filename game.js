@@ -43,7 +43,7 @@ function gameInit()
     const tileLayer = new TileLayer(pos, tileCollisionSize);
     
     Player.setCollision(1, 1, 1);
-    Player.elasticity = 0;
+    Player.elasticity = 0.25;
     Player.friction = 1;
     floor.setCollision(1, 1, 1);
     floor.gravityScale = 0;
@@ -91,7 +91,7 @@ function gameInit()
     // enable gravity
     gravity = -0.009807;
     
-    setTimeout(function(){Player.applyForce(vec2(0,0.25))},1000);
+    //setTimeout(function(){Player.applyForce(vec2(0,0.25))},1000);
 
     // Create the world
 }
@@ -108,23 +108,29 @@ function gameUpdate()
       //  sound_click.play(mousePos);
     }
 
+    //console.log(Player.pos.y);
+    //console.log(platform.pos.y+platform.size.y+0.005);
     // Player Control
 
     document.addEventListener('keydown', (e) => {
         if (e.keyCode == 87) {
             // W
-            if(PlayerTouchingGround){
-            Player.applyForce(vec2(0,0.25));
-            PlayerTouchingGround = false;
-            setTimeout(function(){PlayerTouchingGround = true;}, 1000);
+            if(Math.round(Player.pos.y) == Math.round(floor.pos.y+floor.size.y)){
+            Player.applyForce(vec2(0,-1));
             }
+            if(Math.round(Player.pos.y) == Math.round(platform.pos.y+platform.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform2.pos.y+platform2.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }        
         }
         if (e.keyCode === 65) {
             // A
             Player.friction = 1;
             if(Player.velocity.x > -0.1){
             Player.applyAcceleration(LeftWalkSpeed);
-            console.log(Player.velocity.x);
+            //console.log(Player.velocity.x);
         }
         }
         if (e.keyCode === 83) {
@@ -136,7 +142,7 @@ function gameUpdate()
             Player.friction = 1;
             if(Player.velocity.x < 0.1){
             Player.applyAcceleration(RightWalkSpeed);
-            console.log(Player.velocity.x);
+            //console.log(Player.velocity.x);
         }
     }
     });
