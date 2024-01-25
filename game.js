@@ -123,6 +123,30 @@ function gameUpdate()
             }
             if(Math.round(Player.pos.y) == Math.round(platform2.pos.y+platform2.size.y)){
                 Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform3.pos.y+platform3.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform4.pos.y+platform4.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform5.pos.y+platform5.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform6.pos.y+platform6.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform7.pos.y+platform7.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform8.pos.y+platform8.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform9.pos.y+platform9.size.y)){
+                Player.applyForce(vec2(0,-1));
+            }
+            if(Math.round(Player.pos.y) == Math.round(platform10.pos.y+platform10.size.y)){
+                Player.applyForce(vec2(0,-1));
             }        
         }
         if (e.keyCode === 65) {
