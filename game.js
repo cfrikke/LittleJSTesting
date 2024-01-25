@@ -22,6 +22,14 @@ const LeftWalkSpeed = vec2(-0.001,0);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
 const platform = new EngineObject(vec2(15,2), vec2(1, 1));
 const platform2 = new EngineObject(vec2(16,4), vec2(1, 1));
+const platform3 = new EngineObject(vec2(19,6), vec2(1, 1));
+const platform4 = new EngineObject(vec2(14,8), vec2(2, 1));
+const platform5 = new EngineObject(vec2(15,10.5), vec2(2, 1));
+const platform6 = new EngineObject(vec2(19,12.5), vec2(2, 1));
+const platform7 = new EngineObject(vec2(13,15), vec2(10, 1));
+const platform8 = new EngineObject(vec2(2,15), vec2(3, 1));
+const platform9 = new EngineObject(vec2(-4,15), vec2(4, 1));
+const platform10 = new EngineObject(vec2(-9,15), vec2(4, 1));
 const JumpTimer = new Timer;
 let PlayerTouchingGround = true;
 
@@ -46,6 +54,30 @@ function gameInit()
     platform2.setCollision(1, 1, 1);
     platform2.gravityScale = 0;
     platform2.mass = 0;
+    platform3.setCollision(1, 1, 1);
+    platform3.gravityScale = 0;
+    platform3.mass = 0;
+    platform4.setCollision(1, 1, 1);
+    platform4.gravityScale = 0;
+    platform4.mass = 0;
+    platform5.setCollision(1, 1, 1);
+    platform5.gravityScale = 0;
+    platform5.mass = 0;
+    platform6.setCollision(1, 1, 1);
+    platform6.gravityScale = 0;
+    platform6.mass = 0;
+    platform7.setCollision(1, 1, 1);
+    platform7.gravityScale = 0;
+    platform7.mass = 0;
+    platform8.setCollision(1, 1, 1);
+    platform8.gravityScale = 0;
+    platform8.mass = 0;
+    platform9.setCollision(1, 1, 1);
+    platform9.gravityScale = 0;
+    platform9.mass = 0;
+    platform10.setCollision(1, 1, 1);
+    platform10.gravityScale = 0;
+    platform10.mass = 0;
     
     // get level data from the tiles image
     const imageLevelDataRow = 1;
