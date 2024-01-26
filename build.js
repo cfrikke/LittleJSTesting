@@ -11,12 +11,12 @@ const sourceFiles =
 [
     '../../build/littlejs.release.js',
     'game.js',
-    // add your game's files here
+
 ];
 const dataFiles =
 [
     'tiles.png',
-    // add your game's data files here
+
 ];
 
 console.log(`Building ${PROGRAM_NAME}...`);
