@@ -15,17 +15,17 @@ let MouseParticleTrailCreated = false;
 // game variables
 let particleEmitter;
 const pos = vec2(2,3);
-const Player = new EngineObject(vec2(1,3), vec2(0.999, 0.999));
+const Player = new EngineObject(vec2(-10,3), vec2(0.999, 0.999));
 const JumpForce = vec2(0,0.25);
 const RightWalkSpeed = vec2(0.001,0);
 const LeftWalkSpeed = vec2(-0.001,0);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
-const platform = new EngineObject(vec2(8,3), vec2(1, 1));
-const platform2 = new EngineObject(vec2(14,4), vec2(1, 1));
-const platform3 = new EngineObject(vec2(19,6), vec2(1, 1));
-const platform4 = new EngineObject(vec2(14,8), vec2(2, 1));
-const platform5 = new EngineObject(vec2(15,10.5), vec2(2, 1));
-const platform6 = new EngineObject(vec2(19,12.5), vec2(2, 1));
+const platform = new EngineObject(vec2(0,3), vec2(10, 1));
+const platform2 = new EngineObject(vec2(12,4), vec2(5, 1));
+const platform3 = new EngineObject(vec2(23,6), vec2(7.5, 1));
+const platform4 = new EngineObject(vec2(32,0), vec2(5, 1));
+const platform5 = new EngineObject(vec2(38,7), vec2(2, 1));
+const platform6 = new EngineObject(vec2(32,9.5), vec2(2, 1));
 const platform7 = new EngineObject(vec2(13,15), vec2(10, 1));
 const platform8 = new EngineObject(vec2(2,15), vec2(3, 1));
 const platform9 = new EngineObject(vec2(-4,15), vec2(4, 1));
@@ -60,6 +60,7 @@ function gameInit()
     platform4.setCollision(1, 1, 1);
     platform4.gravityScale = 0;
     platform4.mass = 0;
+    platform4.color = new Color(0, 255, 0,1);
     platform5.setCollision(1, 1, 1);
     platform5.gravityScale = 0;
     platform5.mass = 0;
@@ -102,12 +103,9 @@ function gameUpdate()
     if(MouseParticleTrailCreated){
     //MouseParticleTrail();
     }
-    if (mouseWasPressed(0))
-    {
-        // play sound when mouse is pressed
-      //  sound_click.play(mousePos);
-    }
 
+
+    
     //console.log(Player.pos.y);
     //console.log(platform.pos.y+platform.size.y+0.005);
     // Player Control
@@ -128,7 +126,9 @@ function gameUpdate()
                 Player.applyForce(vec2(0,-1));
             }
             if(Math.round(Player.pos.y) == Math.round(platform4.pos.y+platform4.size.y)){
-                Player.applyForce(vec2(0,-1));
+                //Player.elasticity = 1;
+                Player.applyForce(vec2(0,2));
+                //Player.elasticity = 0.25;
             }
             if(Math.round(Player.pos.y) == Math.round(platform5.pos.y+platform5.size.y)){
                 Player.applyForce(vec2(0,-1));
