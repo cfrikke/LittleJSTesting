@@ -17,7 +17,7 @@ let Particles = false;
 // game variables
 let particleEmitter;
 const pos = vec2(2,3);
-const Player = new EngineObject(vec2(-10,20), vec2(0.999, 0.999));
+const Player = new EngineObject(vec2(-10,3), vec2(0.999, 0.999));
 const JumpForce = vec2(0,0.25);
 const RightWalkSpeed = vec2(0.001,0);
 const LeftWalkSpeed = vec2(-0.001,0);
