@@ -8,27 +8,30 @@
 // sound effects
 const sound_click =    new Sound([1,.2,25,,0.1,,1,,,,,0.2,,4]);
 // medals
-const JumpMedal = new Medal(0, 'Geometry Dash', 'You can jump!', '🎖️');
+const JumpMedal = new Medal(0, 'Geometry Dash', 'You can jump!', '🔷');
+const DeathMedal = new Medal(0, 'You Died', 'oof', '💀');
+const WinMedal = new Medal(0, 'You Win!!', 'Great Job!!', '🎖️');
 medalsInit('Hello World');
-let MouseParticleTrailCreated = false;
+let Particles = false;
 
 // game variables
 let particleEmitter;
 const pos = vec2(2,3);
-const Player = new EngineObject(vec2(-10,3), vec2(0.999, 0.999));
+const Player = new EngineObject(vec2(-10,20), vec2(0.999, 0.999));
 const JumpForce = vec2(0,0.25);
 const RightWalkSpeed = vec2(0.001,0);
 const LeftWalkSpeed = vec2(-0.001,0);
 const floor = new EngineObject(vec2(15,0), vec2(100, 1));
 const platform = new EngineObject(vec2(0,3), vec2(10, 1));
+const danger = new EngineObject(vec2(0,3), vec2(2, 1));
 const platform2 = new EngineObject(vec2(12,4), vec2(5, 1));
 const platform3 = new EngineObject(vec2(23,6), vec2(7.5, 1));
 const platform4 = new EngineObject(vec2(32,0), vec2(5, 1));
-const platform5 = new EngineObject(vec2(38,7), vec2(2, 1));
-const platform6 = new EngineObject(vec2(32,9.5), vec2(2, 1));
-const platform7 = new EngineObject(vec2(13,15), vec2(10, 1));
-const platform8 = new EngineObject(vec2(2,15), vec2(3, 1));
-const platform9 = new EngineObject(vec2(-4,15), vec2(4, 1));
+const platform5 = new EngineObject(vec2(36,5), vec2(3, 1));
+const platform6 = new EngineObject(vec2(35,8), vec2(2, 1));
+const platform7 = new EngineObject(vec2(25,10), vec2(10, 1));
+const platform8 = new EngineObject(vec2(10,12), vec2(15, 1));
+const platform9 = new EngineObject(vec2(-2,14), vec2(4, 1));
 const platform10 = new EngineObject(vec2(-9,15), vec2(4, 1));
 const JumpTimer = new Timer;
 let PlayerTouchingGround = true;
@@ -48,6 +51,10 @@ function gameInit()
     floor.setCollision(1, 1, 1);
     floor.gravityScale = 0;
     floor.mass = 0;
+    danger.setCollision(1, 1, 1);
+    danger.gravityScale = 0;
+    danger.mass = 0;
+    danger.color = new Color(1, 0, 0,1);
     platform.setCollision(1, 1, 1);
     platform.gravityScale = 0;
     platform.mass = 0;
@@ -60,7 +67,7 @@ function gameInit()
     platform4.setCollision(1, 1, 1);
     platform4.gravityScale = 0;
     platform4.mass = 0;
-    platform4.color = new Color(0, 255, 0,1);
+    platform4.color = new Color(0, 1, 0,1);
     platform5.setCollision(1, 1, 1);
     platform5.gravityScale = 0;
     platform5.mass = 0;
@@ -100,8 +107,27 @@ function gameInit()
 function gameUpdate()
 {
     localStorage.clear();
-    if(MouseParticleTrailCreated){
-    //MouseParticleTrail();
+    if(Particles){
+    MouseParticleTrail();
+    }
+
+    //Player.angle = Player.pos.x;
+    if(Player.pos.x >= (platform4.pos.x-(0.5*platform4.size.x)) && Player.pos.x <= (platform4.pos.x+(0.5*platform4.size.x))){
+        Player.elasticity = 0.95;
+        //Player.applyForce(vec2(0,-2));
+        //Player.elasticity = 0.25;
+    }else{
+        Player.elasticity = 0.25;
+    }
+    if(Math.round(Player.pos.y) == Math.round(danger.pos.y+danger.size.y) && Player.pos.x >= (danger.pos.x-(0.5*danger.size.x)) && Player.pos.x <= (danger.pos.x+(0.5*danger.size.x))){
+        Player.pos = vec2(-10,3);
+        DeathMedal.unlock();
+    }
+    if(Math.round(Player.pos.y) == Math.round(platform10.pos.y+platform10.size.y) && Player.pos.x >= (platform10.pos.x-(0.5*platform10.size.x)) && Player.pos.x <= (platform10.pos.x+(0.5*platform10.size.x))){
+        CreateParticles();
+        Player.pos = vec2(-10,3);
+        WinMedal.unlock();
+
     }
 
 
@@ -113,7 +139,8 @@ function gameUpdate()
     document.addEventListener('keydown', (e) => {
         if (e.keyCode == 87) {
             // W
-            if(Math.round(Player.pos.y) == Math.round(floor.pos.y+floor.size.y)){
+            JumpMedal.unlock();
+            if(Math.round(Player.pos.y) == Math.round(floor.pos.y+floor.size.y) && (Player.pos.x <= (platform4.pos.x-(0.5*platform4.size.x)) || Player.pos.x >= (platform4.pos.x+(0.5*platform4.size.x)))){
             Player.applyForce(vec2(0,-1));
             }
             if(Math.round(Player.pos.y) == Math.round(platform.pos.y+platform.size.y)){
@@ -125,10 +152,8 @@ function gameUpdate()
             if(Math.round(Player.pos.y) == Math.round(platform3.pos.y+platform3.size.y)){
                 Player.applyForce(vec2(0,-1));
             }
-            if(Math.round(Player.pos.y) == Math.round(platform4.pos.y+platform4.size.y)){
-                //Player.elasticity = 1;
-                Player.applyForce(vec2(0,2));
-                //Player.elasticity = 0.25;
+            if(Math.round(Player.pos.y) == Math.round(platform4.pos.y) && (Player.pos.x >= (platform4.pos.x-(0.5*platform4.size.x)) && Player.pos.x <= (platform4.pos.x+(0.5*platform4.size.x)))){
+                Player.applyForce(vec2(0,-1));
             }
             if(Math.round(Player.pos.y) == Math.round(platform5.pos.y+platform5.size.y)){
                 Player.applyForce(vec2(0,-1));
@@ -156,10 +181,6 @@ function gameUpdate()
             Player.applyAcceleration(LeftWalkSpeed);
             //console.log(Player.velocity.x);
         }
-        }
-        if (e.keyCode === 83) {
-            // S
-            Player.applyForce(vec2(0,-1));
         }
         if (e.keyCode === 68) {
             // D
@@ -216,20 +237,20 @@ function gameRenderPost()
     // draw to overlay canvas for hud rendering
     //drawTextScreen('LittleJS Engine Demo', vec2(mainCanvasSize.x/2, 80), 80);
 }
-function createMouseParticleTrail(){
+function CreateParticles(){
     particleEmitter = new ParticleEmitter(
         vec2(-20), 0,                            // emitPos, emitAngle
         1, 0, 500, PI,                          // emitSize, emitTime, emitRate, emiteCone
         0, vec2(16),                            // tileIndex, tileSize
         new Color(1,1,1),   new Color(0,0,0),   // colorStartA, colorStartB
-        new Color(1,1,1,0), new Color(0,0,0,0), // colorEndA, colorEndB
+        new Color(1,1,1,0), new Color(255,255,0,0), // colorEndA, colorEndB
         2, .2, .2, .1, .05,   // time, sizeStart, sizeEnd, speed, angleSpeed
         .99, 1, 1, PI,        // damping, angleDamping, gravityScale, cone
         .05, .5, 1, 1         // fadeRate, randomness, collide, additive
     );
     particleEmitter.elasticity = .3; // bounce when it collides
     particleEmitter.trailScale = 2;  // stretch in direction of motion
-    MouseParticleTrailCreated = true;
+    Particles = true;
 
 }
 // change name to win statement if needed.
@@ -242,9 +263,7 @@ function MouseParticleTrail(){
         particleEmitter.colorEndA = particleEmitter.colorStartA.scale(1,0);
         particleEmitter.colorEndB = particleEmitter.colorStartB.scale(1,0);
     }
-        if (mousePosScreen.x){
-        particleEmitter.pos = mousePos;
-        }
+        particleEmitter.pos = vec2(Player.pos.x, Player.pos.y);
 
     }
 
